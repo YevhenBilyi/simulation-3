@@ -28,6 +28,7 @@ app.post('/api/auth/register', controller.register);
 app.post('/api/auth/login', controller.login);
 app.post('/api/auth/logout', controller.logout);
 app.get('/api/posts', controller.getAll)
+app.get('/api/post/:id', controller.getOne)
 
 
 app.listen(PORT, ()=>console.log('Listening on port:'+PORT));

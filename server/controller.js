@@ -23,9 +23,9 @@ module.exports={
     },
     getAll:(req, res, next)=>{
         const db=req.app.get('db');
-        const{search}=req.query;
-        if(search){
-            db.get_search(['%'+search+'%'])
+        const{title}=req.query;
+        if(title){
+            db.get_search(['%'+title+'%'])
             .then(posts=>res.status(200).send(posts))
             .catch(()=>res.status(500).send())
         }
@@ -34,5 +34,13 @@ module.exports={
             .then(posts=>res.status(200).send(posts))
             .catch(()=>res.status(500).send())
         }
+    },
+    getOne:(req,res,next)=>{
+        const db=req.app.get('db');
+        const{id}=req.params;
+        db.get_post([id])
+        .then(post=>res.status(200).send(post))
+        .catch(()=>res.status(500).send())
+
     }
 }

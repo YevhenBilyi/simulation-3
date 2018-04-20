@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 class Dashboard extends Component {
   constructor(){
@@ -11,6 +12,7 @@ class Dashboard extends Component {
     }
     this.handleSearch=this.handleSearch.bind(this);
     this.componentDidMount=this.componentDidMount.bind(this);
+    this.resetSearch=this.resetSearch.bind(this);
   }
 handleSearch(e){
   this.setState({
@@ -18,6 +20,13 @@ handleSearch(e){
   })
 }
 componentDidMount(){
+
+    axios.get('/api/posts').then(res=>{
+      this.setState({posts:res.data})
+    })
+  
+}
+resetSearch(){
   if (this.state.search.length>0){
     axios.get(`/api/posts/?title=${this.state.search}`).then(res=>{
       this.setState({posts:res.data})
@@ -28,17 +37,19 @@ componentDidMount(){
       this.setState({posts:res.data})
     })
   }
+  this.setState({search:''})
 }
+
 
   render() {
     let posts=this.state.posts.map((post,i)=>{
-      return (<div key={i}>{post.title} {post.username} {post.profile_pic}</div>)
+      return (<Link to={`/post/${i}`} key={i}><div >{post.title} {post.username} {post.profile_pic}</div></Link>)
     })
     return (
       <div className="Dashboard">
         <input placeholder='search' onChange={e=>this.handleSearch(e.target.value)} type='text'/>
-        <button>Search </button>
-        <button>Reset </button>
+        <button onClick={this.resetSearch}>Search </button>
+      
         {posts}
       </div>
     );
